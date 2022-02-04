@@ -77,10 +77,16 @@ namespace AI4GoodSite
             {
                 var context = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                 context.Database.Migrate();
-                if (context.Roles.ToList().Count <= 0)
+                if (context.Roles.Count() <= 0)
                 {
-                    var roleSeedTask = DataSeeder.SeedRoles(context);
-                    roleSeedTask.Wait();
+                    var rolesSeedTask = DataSeeder.SeedRoles(context);
+                    rolesSeedTask.Wait();
+                   
+                }
+                if(context.Items.Count() == 0)
+                {
+                    var itemsSeedTask = DataSeeder.SeedItems(context);
+                    itemsSeedTask.Wait();
                 }
             }
         }
