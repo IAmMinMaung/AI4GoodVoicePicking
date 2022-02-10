@@ -8,7 +8,7 @@ namespace AI4GoodSite.Infrastructure.Data
         public int OrderId { get; set; }
         public string User { get; set; }
         public string Status { get; set; }
-        public string ItemDisplayIdStart { get; set; }
-        public string ItemDisplayIdEnd { get; set; }
+        public int ItemIdStart { get; set; }
+        public int ItemIdEnd { get; set; }
     }
 }

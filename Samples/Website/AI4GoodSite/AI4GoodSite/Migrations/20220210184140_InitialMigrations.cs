@@ -76,8 +76,8 @@ namespace AI4GoodSite.Migrations
                     OrderId = table.Column<int>(type: "int", nullable: false),
                     User = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ItemDisplayIdStart = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ItemDisplayIdEnd = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    ItemIdStart = table.Column<int>(type: "int", nullable: false),
+                    ItemIdEnd = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -209,7 +209,6 @@ namespace AI4GoodSite.Migrations
                     ItemScanId = table.Column<int>(type: "int", nullable: false),
                     ItemId = table.Column<int>(type: "int", nullable: false),
                     OrderId = table.Column<int>(type: "int", nullable: false),
-                    DisplayId = table.Column<int>(type: "int", nullable: false),
                     ScannedDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     User = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },

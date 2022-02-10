@@ -47,7 +47,7 @@ namespace AI4GoodSite.Infrastructure.Data.Seed
                 items.Add(newRandomItem);
                 if(i> 0 && (i+1) % 5 == 0)
                 {
-                    var newOrder = new Order() { OrderId = orderId++, Status = "Pending", User = "AI4GoodUser", ItemDisplayIdStart = $"{i + 1 - 4}", ItemDisplayIdEnd = $"{i+1}" };
+                    var newOrder = new Order() { OrderId = orderId++, Status = "Pending", User = "AI4GoodUser", ItemIdStart = i + 1 - 4, ItemIdEnd = i+1 };
                     orders.Add(newOrder);
                 }
             }

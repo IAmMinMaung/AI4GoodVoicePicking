@@ -9,7 +9,6 @@ namespace AI4GoodSite.Infrastructure.Data
         public int ItemScanId { get; set; }
         public int ItemId { get; set; }
         public int OrderId { get; set; }
-        public int DisplayId { get; set; }
         public Item Item { get; set; }
         public DateTime ScannedDateTime { get; set; }
         public string User { get; set; }

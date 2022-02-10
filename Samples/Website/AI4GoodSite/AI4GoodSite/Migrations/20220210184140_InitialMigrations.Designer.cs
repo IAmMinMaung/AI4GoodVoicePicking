@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AI4GoodSite.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220210172418_InitialMigrations")]
+    [Migration("20220210184140_InitialMigrations")]
     partial class InitialMigrations
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -49,9 +49,6 @@ namespace AI4GoodSite.Migrations
                     b.Property<int>("ItemScanId")
                         .HasColumnType("int");
 
-                    b.Property<int>("DisplayId")
-                        .HasColumnType("int");
-
                     b.Property<int>("ItemId")
                         .HasColumnType("int");
 
@@ -76,11 +73,11 @@ namespace AI4GoodSite.Migrations
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
 
-                    b.Property<string>("ItemDisplayIdEnd")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("ItemIdEnd")
+                        .HasColumnType("int");
 
-                    b.Property<string>("ItemDisplayIdStart")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("ItemIdStart")
+                        .HasColumnType("int");
 
                     b.Property<string>("Status")
                         .HasColumnType("nvarchar(max)");
