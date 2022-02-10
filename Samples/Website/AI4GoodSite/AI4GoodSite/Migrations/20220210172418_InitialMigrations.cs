@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace AI4GoodSite.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class InitialMigrations : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -58,7 +58,7 @@ namespace AI4GoodSite.Migrations
                 schema: "AI4Good",
                 columns: table => new
                 {
-                    ItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ItemId = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SKU = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -66,6 +66,22 @@ namespace AI4GoodSite.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Items", x => x.ItemId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Orders",
+                schema: "AI4Good",
+                columns: table => new
+                {
+                    OrderId = table.Column<int>(type: "int", nullable: false),
+                    User = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ItemDisplayIdStart = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ItemDisplayIdEnd = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Orders", x => x.OrderId);
                 });
 
             migrationBuilder.CreateTable(
@@ -190,8 +206,10 @@ namespace AI4GoodSite.Migrations
                 schema: "AI4Good",
                 columns: table => new
                 {
-                    ItemScanId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ItemScanId = table.Column<int>(type: "int", nullable: false),
+                    ItemId = table.Column<int>(type: "int", nullable: false),
+                    OrderId = table.Column<int>(type: "int", nullable: false),
+                    DisplayId = table.Column<int>(type: "int", nullable: false),
                     ScannedDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     User = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -284,6 +302,10 @@ namespace AI4GoodSite.Migrations
 
             migrationBuilder.DropTable(
                 name: "ItemScans",
+                schema: "AI4Good");
+
+            migrationBuilder.DropTable(
+                name: "Orders",
                 schema: "AI4Good");
 
             migrationBuilder.DropTable(

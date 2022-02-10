@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -35,8 +35,6 @@
     <None Remove="Infrastructure\Extensions\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Infrastructure\" />
-    <Folder Include="Infrastructure\Data\" />
     <Folder Include="Infrastructure\Data\Seed\" />
     <Folder Include="Infrastructure\DTOs\" />
     <Folder Include="Infrastructure\Repository\" />

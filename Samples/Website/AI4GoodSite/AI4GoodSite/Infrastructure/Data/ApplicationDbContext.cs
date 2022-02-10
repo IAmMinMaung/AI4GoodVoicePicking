@@ -20,5 +20,6 @@ namespace AI4GoodSite.Infrastructure.Data
         }
         public DbSet<Item> Items { get; set; }
         public DbSet<ItemScan> ItemScans { get; set; }
+        public DbSet<Order> Orders { get; set; }
     }
 }

@@ -24,27 +24,34 @@ namespace AI4GoodSite.Infrastructure.Data.Seed
 
         public static async Task SeedItems(ApplicationDbContext context)
         {
-            var item = new Item() { ItemId = Guid.NewGuid(), Description = "Ink Cartridge", Name = "Ink Cartridge", SKU = "SKU TBD" };
-            var itemList = new List<Item>();
-            itemList.AddRange(GetNRandomItems(20));
-            context.Items.AddRange(itemList);
+            var tupleResult = GetNRandomItems(20);
+            context.Items.AddRange(tupleResult.Item2);
+            context.Orders.AddRange(tupleResult.Item1);
             await context.SaveChangesAsync();
         }
 
-        private static List<Item> GetNRandomItems(int N)
+        private static Tuple<List<Order>, List<Item>> GetNRandomItems(int N)
         {
             List<Item> items = new List<Item>();
+            List<Order> orders = new List<Order>();
             Random rand = new Random();
+            var orderId = 1;
             
             string[] itemNames = new string[] { "Ink Cartridges", "Toner", "Laser Ink Jet cartridges", "Mono Laser Cartridges", "Color Laser cartridges" };
+            long sku = 1000000;
             for(int i=0; i<N; ++i)
             {
                 var randomIndex = rand.NextInt64(0, 4); // 5 types of items: Int Cartridges, Toner, Laser Ink Jet cartridges, Mono Laser Cartridges, Color Laser cartridges
                 var randomItemName = itemNames[randomIndex];
-                var newRandomItem = new Item() { ItemId = Guid.NewGuid(), Description = randomItemName, Name = randomItemName, SKU = "SKU TBD" };
+                var newRandomItem = new Item() { ItemId = i+1, Description = randomItemName, Name = randomItemName, SKU = $"{sku++}" };
                 items.Add(newRandomItem);
+                if(i> 0 && (i+1) % 5 == 0)
+                {
+                    var newOrder = new Order() { OrderId = orderId++, Status = "Pending", User = "AI4GoodUser", ItemDisplayIdStart = $"{i + 1 - 4}", ItemDisplayIdEnd = $"{i+1}" };
+                    orders.Add(newOrder);
+                }
             }
-            return items;
+            return Tuple.Create(orders, items);
         }
     }
 }

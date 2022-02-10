@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AI4GoodSite.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220114185900_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20220210172418_InitialMigrations")]
+    partial class InitialMigrations
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -27,8 +27,8 @@ namespace AI4GoodSite.Migrations
 
             modelBuilder.Entity("AI4GoodSite.Infrastructure.Data.Item", b =>
                 {
-                    b.Property<Guid>("ItemId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("ItemId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -46,11 +46,17 @@ namespace AI4GoodSite.Migrations
 
             modelBuilder.Entity("AI4GoodSite.Infrastructure.Data.ItemScan", b =>
                 {
-                    b.Property<Guid>("ItemScanId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("ItemScanId")
+                        .HasColumnType("int");
 
-                    b.Property<Guid>("ItemId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("DisplayId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ItemId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("ScannedDateTime")
                         .HasColumnType("datetime2");
@@ -63,6 +69,28 @@ namespace AI4GoodSite.Migrations
                     b.HasIndex("ItemId");
 
                     b.ToTable("ItemScans", "AI4Good");
+                });
+
+            modelBuilder.Entity("AI4GoodSite.Infrastructure.Data.Order", b =>
+                {
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ItemDisplayIdEnd")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ItemDisplayIdStart")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("User")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("OrderId");
+
+                    b.ToTable("Orders", "AI4Good");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
