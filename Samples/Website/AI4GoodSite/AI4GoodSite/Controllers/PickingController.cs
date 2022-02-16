@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace AI4GoodSite.Controllers
 {
@@ -53,26 +54,36 @@ namespace AI4GoodSite.Controllers
             }
         }
 
-        [HttpGet("{itemId}")]
-        public IActionResult UpdatePickedItemById(int itemId)
+        [HttpGet("{itemIds}")]
+        public async Task<IActionResult> UpdatePickedItemsByIds(string itemIds)
         {
             try
             {
-                if (_context.ItemScans.Any(itemScan => itemScan.ItemId == itemId))
+                var itemIdList = itemIds.Split("#");
+                foreach (var id in itemIdList)
                 {
-                    return StatusCode(StatusCodes.Status400BadRequest);
+                    var itemId = Int32.Parse(id);
+                    if (_context.ItemScans.Any(itemScan => itemScan.ItemId == itemId))
+                    {
+                        return StatusCode(StatusCodes.Status400BadRequest);
+                    }
+                    await UpdatePickedItemById(itemId);
                 }
-                // https://localhost:44306/api/picking/UpdatePickedItembyId/1
-                var itemScanCount = _context.ItemScans.Count();
-                var orderId = _context.Orders.Where(o => itemId >= o.ItemIdStart && itemId <= o.ItemIdEnd).FirstOrDefault()?.OrderId;
-                _context.ItemScans.Add(new ItemScan() { ItemScanId = itemScanCount+1, ItemId = itemId, ScannedDateTime = DateTime.Now, User = "AI4GoodUser", OrderId = orderId ?? 1 });
-                _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
                 return StatusCode(StatusCodes.Status200OK);
             }
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
+        }
+
+        private async Task UpdatePickedItemById(int itemId)
+        {
+            // https://localhost:44306/api/picking/UpdatePickedItembyId/1
+            var itemScanCount = _context.ItemScans.Count();
+            var orderId = _context.Orders.Where(o => itemId >= o.ItemIdStart && itemId <= o.ItemIdEnd).FirstOrDefault()?.OrderId;
+            await _context.ItemScans.AddAsync(new ItemScan() { ItemScanId = itemScanCount + 1, ItemId = itemId, ScannedDateTime = DateTime.Now, User = "AI4GoodUser", OrderId = orderId ?? 1 });
         }
 
         public class UpdateRequest
