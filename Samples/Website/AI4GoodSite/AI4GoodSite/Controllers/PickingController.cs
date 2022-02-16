@@ -1,7 +1,9 @@
 ﻿using AI4GoodSite.Infrastructure.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -59,7 +61,10 @@ namespace AI4GoodSite.Controllers
         {
             try
             {
-                var itemIdList = itemIds.Split("#");
+                var itemIdList = itemIds.Split(",");
+                var itemScans = new List<ItemScan>();
+                var itemScanCount = _context.ItemScans.Count();
+                int i = 1;
                 foreach (var id in itemIdList)
                 {
                     var itemId = Int32.Parse(id);
@@ -67,8 +72,10 @@ namespace AI4GoodSite.Controllers
                     {
                         return StatusCode(StatusCodes.Status400BadRequest);
                     }
-                    await UpdatePickedItemById(itemId);
+                    var itemScanId = itemScanCount + i++;
+                    UpdatePickedItemById(itemId, itemScanId, ref itemScans);
                 }
+                await _context.ItemScans.AddRangeAsync(itemScans);
                 await _context.SaveChangesAsync();
                 return StatusCode(StatusCodes.Status200OK);
             }
@@ -78,12 +85,12 @@ namespace AI4GoodSite.Controllers
             }
         }
 
-        private async Task UpdatePickedItemById(int itemId)
+        private void UpdatePickedItemById(int itemId, int itemScanId, ref List<ItemScan> itemScans)
         {
             // https://localhost:44306/api/picking/UpdatePickedItembyId/1
-            var itemScanCount = _context.ItemScans.Count();
+            
             var orderId = _context.Orders.Where(o => itemId >= o.ItemIdStart && itemId <= o.ItemIdEnd).FirstOrDefault()?.OrderId;
-            await _context.ItemScans.AddAsync(new ItemScan() { ItemScanId = itemScanCount + 1, ItemId = itemId, ScannedDateTime = DateTime.Now, User = "AI4GoodUser", OrderId = orderId ?? 1 });
+            itemScans.Add(new ItemScan() { ItemScanId = itemScanId, ItemId = itemId, ScannedDateTime = DateTime.Now, User = "AI4GoodUser", OrderId = orderId ?? 1 });
         }
 
         public class UpdateRequest
